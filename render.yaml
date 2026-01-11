@@ -48,7 +48,7 @@ services:
           transform: https://${host}/api
 
   # PostgreSQL Database
-  - type: pg
+  - type: postgres
     name: posprzataj-db
     plan: starter
     databaseName: posprzataj_se
