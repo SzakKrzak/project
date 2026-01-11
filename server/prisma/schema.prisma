@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  name            String
+  apartmentNumber String
+  passwordHash    String
+  isManager       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  completedTasks  TaskCompletion[]
+  
+  @@unique([apartmentNumber])
+  @@map("users")
+}
+
+model CleaningTask {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  frequency   String   // 'Codziennie' | 'Co 2 dni' | 'Co tydzień' | 'Co 2 tygodnie' | 'Co miesiąc'
+  location    String   // 'Bar' | 'Zaplecze' | 'Biuro' | 'Produkcja' | 'Sala' | 'Łazienka' | 'Zmywak' | 'Inne'
+  imageUrl    String?
+  isImportant Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  completions TaskCompletion[]
+  
+  @@map("cleaning_tasks")
+}
+
+model TaskCompletion {
+  id              String        @id @default(cuid())
+  taskId          String
+  userId          String
+  completionImage String?
+  completedAt     DateTime      @default(now())
+  notes           String?
+  
+  task            CleaningTask  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id])
+  
+  @@index([taskId])
+  @@index([userId])
+  @@index([completedAt])
+  @@map("task_completions")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String?
+  message   String
+  type      String   // 'task_due' | 'task_overdue' | 'task_completed' | 'system'
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([isRead])
+  @@map("notifications")
+}
