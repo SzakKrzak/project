@@ -13,6 +13,7 @@
     "start": "node server/dist/index.js",
     "start:prod": "NODE_ENV=production node server/dist/index.js",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "test": "vitest",
@@ -62,5 +63,9 @@
     "eslint": "^8.57.0",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
   }
 }
