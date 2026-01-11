@@ -11,9 +11,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: posprzataj-db
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
@@ -46,10 +44,3 @@ services:
           name: posprzataj-backend
           property: host
           transform: https://${host}/api
-
-  # PostgreSQL Database
-  - type: postgres
-    name: posprzataj-db
-    plan: starter
-    databaseName: posprzataj_se
-    user: posprzataj
